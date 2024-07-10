@@ -27,30 +27,28 @@ st.title(":blue[Car Dheko Used Car Price Prediction]")
 st.write(""" """)
 st.image("S:/Car/CarDekho_FeaturedImage_YS.png", width= 800)
 #options
-Comfort_and_convenience = ['1','2','3','4','5','6','7','8','9','10',
-                           '11','12','13','14','15','16','17','18','19','20',
-                           '21','22','23','24','25','26','27','28','29','30',
-                           '31','32','33','34','35','36','37']
+Gear = ['4','5','6']
+
+City = ['0','1','2','3','4','5']
+City_dict = {'Delhi':2,'Kolkata':5,'Chennai':1,'Hyderabad':3,'Jaipur':4,'Bengaluru':0}
 
 
-Safety = ['1','2','3','4','5','6','7','8','9','10',
-          '11','12','13','14','15','16','17','18','19','20',
-          '21','22','23','24','25','26','27','28','29','30',
-          '31','32','33','34','35','36','37','38','39','40',
-          '41','42','43','44','45','46','47','48']
 
-Exterior = ['1','2','3','4','5','6','7','8','9','10',
-            '11','12','13','14','15','16','17','18','19','20',
-            '21','22','23','24','25','26','27']
+bt = ['Hatchback', 'SUV', 'Sedan', 'MUV', 'Coupe', 'Minivans',
+       'Pickup Trucks', 'Convertibles', 'Hybrids', 'Wagon']
+bt_dict = {'Hatchback': 0, 'SUV': 7, 'Sedan': 8, 'MUV': 4, 'Coupe': 1,
+           'Minivans': 5, 'Pickup': 6, 'Convertibles': 0, 'Hybrids': 3, 'Wagon': 9}
+fuel_type = ['Petrol', 'Diesel', 'LPG', 'CNG', 'Electric']
+fuel_type_dict = {'Petrol': 4, 'Diesel': 1, 'LPG': 0, 'CNG': 2, 'Electric': 3}
 
+ownerNo = ['0','1','2','3','4','5']
 
-Interior = ['1','2','3','4','5','6','7','8','9','10',
-            '11','12','13','14','15','16','17','18']
+Inusrance_validity = ['Third Party insurance', 'Comprehensive', 'Third Party',
+       'Zero Dep', 'Not Available']
 
-Gear = ['1','2','3','4','5','6','7','8','9']
+Inusrance_validity_dict = {'Third Party insurance': 5, 'Comprehensive': 2, 'Third Party': 4, 
+                           'Zero Dep': 6, 'Not Available': 3}
 
-Entertainment_and_communication = ['1','2','3','4','5','6','7','8','9','10',
-                                   '11','12','13','14','15','16','17','18','19','20','21']
 
 Year_of_Manufacture = ['1','2','3','4','5','6','7','8','9','10',
                        '11','12','13','14','15','16','17','18','19','20','21']
@@ -77,13 +75,16 @@ with st.sidebar:
     m_transmission = st.selectbox(label= "Transmission", options= transmission, index= 0, key= "transmission")
     m_Year_of_Manufacture = st.selectbox(label= "Year of Manufacture", options= Year_of_Manufacture_dict, index= 0, key= "Year_of_Manufacture")
     m_modelYear = st.selectbox(label= "Model Year", options= modelYear_dict, index= 0, key= "modelYear")
-    m_Comfort_and_convenience = st.selectbox(label= "Comfort and Convenience", options= Comfort_and_convenience, index= 0, key= "Comfort_and_convenience")
-    m_Safety = st.selectbox(label= "Safety", options= Safety, index= 0, key= "Safety")
-    m_Exterior = st.selectbox(label= "Exterior", options= Exterior, index= 0, key= "Exterior")
-    m_Interior = st.selectbox(label= "Interior", options= Interior, index= 0, key= "Interior")
-    m_Gear = st.selectbox(label= "Gear", options= Gear, index= 0, key= "Gear")
-    m_Entertainment_and_communication = st.selectbox(label= "Entertainment and Communication", options= Entertainment_and_communication, index= 0, key= "Entertainment_and_communication")
-        
+    m_gear = st.selectbox(label= "Number of gears", options= Gear, index= 0, key= "Gear")
+    m_city = st.selectbox(label = 'City Name', options = City_dict, index = 0, key = 'City')
+    m_Inusrance_validity = st.selectbox(label= "Insurance Validity", options= Inusrance_validity_dict, index= 0, key= "Inusrance_validity")
+    m_ownerNo = st.selectbox(label= "Number of Owners", options= ownerNo, index= 0, key= "ownerNo")
+    m_fuel_type = st.selectbox(label= "Fuel Type", options= fuel_type, index= 0, key= "fuel_type")
+    m_km = st.number_input(label= "Kilometers Driven", step = 1000, value = 0, key= "km")
+    m_bt = st.selectbox(label= "Body Type", options= bt_dict, index= 0, key= "bt")
+    m_mileage = st.number_input(label= "Mileage", step = 5, key= "mileage")
+    
+    
     
     with stylable_container(
         key="red_button",
@@ -106,12 +107,14 @@ def predict_resale_price():
     
 
     # Combine user inputs to an array
-    user_data = np.array([[int(m_Comfort_and_convenience),
-                           int(m_Safety),
-                           int(m_Exterior),
-                           int(m_Interior),
-                           int(m_Gear),
-                           int(m_Entertainment_and_communication),
+    user_data = np.array([[int(m_gear),
+                           int(m_km),
+                           int(m_mileage),
+                           int(City_dict.get(m_city)),
+                           int(Inusrance_validity_dict.get(m_Inusrance_validity)),
+                           int(m_ownerNo),
+                           int(fuel_type_dict.get(m_fuel_type)),
+                           int(bt_dict.get(m_bt)),
                            int(Year_of_Manufacture_dict.get(m_Year_of_Manufacture)),
                            int(modelYear_dict.get(m_modelYear)),
                            int(transmission_dict.get(m_transmission))
